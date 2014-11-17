@@ -1,6 +1,9 @@
-import sys, shutil
-import copy
+import sys, shutil, copy
+import dateutil.parser
 import xml.etree.ElementTree as ElementTree
+
+unit_test_result_path_prefixed = "p:Results/p:UnitTestResult"
+unit_test_path_prefixed = "p:TestDefinitions/p:UnitTest"
 
 namespaces = {'p': 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010'}
 
@@ -12,6 +15,8 @@ def merge(target_file, source_file):
 	source = ElementTree.parse(source_file)
 	target = ElementTree.parse(target_file)
 
+	update_existing_test_results(source, target)
+
 	append_new_tests(source, target)
 
 	target_file.seek(0)
@@ -21,23 +26,41 @@ def merge(target_file, source_file):
 	source_file.close()
 	target_file.close()
 
+def update_existing_test_results(source, target):
+	target_results = target.find("p:Results", namespaces)
+	
+	for source_unit_test in source.iterfind(unit_test_result_path_prefixed, namespaces):
+		target_unit_test = target.find(unit_test_result_path_prefixed + "[@testName='" + source_unit_test.attrib['testName'] + "']", namespaces) 
+		if target_unit_test is not None:
+			
+			source_start_time = dateutil.parser.parse(source_unit_test.attrib['startTime'])
+			target_start_time = dateutil.parser.parse(target_unit_test.attrib['startTime'])
+			
+			if source_start_time > target_start_time:
+				# source contains newer test result
+				print "Updating test result for: " + source_unit_test.attrib['testName']
+				target_results.remove(target_unit_test)
+				target_results.append(copy.deepcopy(source_unit_test))
+				
+			# target_results.append(copy.deepcopy(element))
+
 def append_new_tests(source, target):
 	
 	target_test_definitions = target.find("p:TestDefinitions", namespaces)
 	
-	for element in source.iterfind("p:TestDefinitions/p:UnitTest", namespaces):
-		node = target.find("p:TestDefinitions/p:UnitTest[@name='" + element.attrib['name'] + "']", namespaces) 
-		if node == None:
-			print "Adding test definition: " + element.attrib['name']
-			target_test_definitions.append(copy.deepcopy(element))
+	for source_unit_test in source.iterfind(unit_test_path_prefixed, namespaces):
+		target_unit_test = target.find(unit_test_path_prefixed + "[@name='" + source_unit_test.attrib['name'] + "']", namespaces) 
+		if target_unit_test is None:
+			print "Adding test definition: " + source_unit_test.attrib['name']
+			target_test_definitions.append(copy.deepcopy(source_unit_test))
 			
 	target_results = target.find("p:Results", namespaces)
 	
-	for element in source.iterfind("p:Results/p:UnitTestResult", namespaces):
-		node = target.find("p:Results/p:UnitTestResult[@testName='" + element.attrib['testName'] + "']", namespaces) 
-		if node == None:
-			print "Adding test result: " + element.attrib['testName']
-			target_results.append(copy.deepcopy(element))
+	for source_test_result in source.iterfind(unit_test_result_path_prefixed, namespaces):
+		target_test_result = target.find(unit_test_result_path_prefixed + "[@testName='" + source_test_result.attrib['testName'] + "']", namespaces) 
+		if target_test_result is None:
+			print "Adding test result: " + source_test_result.attrib['testName']
+			target_results.append(copy.deepcopy(source_test_result))
 
 files = sys.argv
 
