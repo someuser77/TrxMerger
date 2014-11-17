@@ -38,7 +38,7 @@ def update_existing_test_results(source, target):
 			
 			if source_start_time > target_start_time:
 				# source contains newer test result
-				print "Updating test result for: " + source_unit_test.attrib['testName']
+				print "\tUpdating test result for: " + source_unit_test.attrib['testName']
 				target_results.remove(target_unit_test)
 				target_results.append(copy.deepcopy(source_unit_test))
 				
@@ -51,7 +51,7 @@ def append_new_tests(source, target):
 	for source_unit_test in source.iterfind(unit_test_path_prefixed, namespaces):
 		target_unit_test = target.find(unit_test_path_prefixed + "[@name='" + source_unit_test.attrib['name'] + "']", namespaces) 
 		if target_unit_test is None:
-			print "Adding test definition: " + source_unit_test.attrib['name']
+			print "\tAdding test definition: " + source_unit_test.attrib['name']
 			target_test_definitions.append(copy.deepcopy(source_unit_test))
 			
 	target_results = target.find("p:Results", namespaces)
@@ -59,7 +59,7 @@ def append_new_tests(source, target):
 	for source_test_result in source.iterfind(unit_test_result_path_prefixed, namespaces):
 		target_test_result = target.find(unit_test_result_path_prefixed + "[@testName='" + source_test_result.attrib['testName'] + "']", namespaces) 
 		if target_test_result is None:
-			print "Adding test result: " + source_test_result.attrib['testName']
+			print "\tAdding test result: " + source_test_result.attrib['testName']
 			target_results.append(copy.deepcopy(source_test_result))
 
 files = sys.argv
@@ -71,9 +71,13 @@ if len(files) < 3:
   exit()
   
 output = files[-1]
-
+print "Processing file: " + files[1]
 shutil.copyfile(files[1], output)
 
-merge(output, files[2])
+files_to_process = files[2:-1]
+
+for file in files_to_process:
+	print "Processing file: " + file
+	merge(output, file)
 
   
