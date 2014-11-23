@@ -6,6 +6,7 @@ unit_test_result_path_prefixed = "p:Results/p:UnitTestResult"
 unit_test_path_prefixed = "p:TestDefinitions/p:UnitTest"
 
 namespaces = {'p': 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010'}
+ElementTree.register_namespace("",namespaces['p'])
 
 def merge(target_file, source_file):
 	
@@ -29,20 +30,25 @@ def merge(target_file, source_file):
 def update_existing_test_results(source, target):
 	target_results = target.find("p:Results", namespaces)
 	
-	for source_unit_test in source.iterfind(unit_test_result_path_prefixed, namespaces):
-		target_unit_test = target.find(unit_test_result_path_prefixed + "[@testName='" + source_unit_test.attrib['testName'] + "']", namespaces) 
-		if target_unit_test is not None:
+	for source_unit_test_result in source.iterfind(unit_test_result_path_prefixed, namespaces):
+		target_unit_test_result = target.find(unit_test_result_path_prefixed + "[@testName='" + source_unit_test_result.attrib['testName'] + "']", namespaces) 
+		if target_unit_test_result is not None:
 			
-			source_start_time = dateutil.parser.parse(source_unit_test.attrib['startTime'])
-			target_start_time = dateutil.parser.parse(target_unit_test.attrib['startTime'])
+			source_start_time = dateutil.parser.parse(source_unit_test_result.attrib['startTime'])
+			target_start_time = dateutil.parser.parse(target_unit_test_result.attrib['startTime'])
 			
 			if source_start_time > target_start_time:
 				# source contains newer test result
-				print "\tUpdating test result for: " + source_unit_test.attrib['testName']
-				target_results.remove(target_unit_test)
-				target_results.append(copy.deepcopy(source_unit_test))
+				print "\tUpdating test result for: " + source_unit_test_result.attrib['testName']
 				
-			# target_results.append(copy.deepcopy(element))
+				old_execution_id = target_unit_test_result.attrib['executionId']
+				new_execution_id = source_unit_test_result.attrib['executionId']
+				
+				unit_test_execution = target.find(unit_test_path_prefixed + "/p:Execution[@id='" + old_execution_id + "']", namespaces) 
+				unit_test_execution.set('id', new_execution_id)
+				
+				target_results.remove(target_unit_test_result)
+				target_results.append(copy.deepcopy(source_unit_test_result))
 
 def append_new_tests(source, target):
 	
@@ -64,7 +70,7 @@ def append_new_tests(source, target):
 
 files = sys.argv
 
-ElementTree.register_namespace("","http://microsoft.com/schemas/VisualStudio/TeamTest/2010")
+
 
 if len(files) < 3:
   print 'Must specify at least one input file and an output file'
