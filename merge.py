@@ -108,7 +108,32 @@ def copy_base_trx(source, output):
 	shutil.copytree(source_data_dir, target_data_dir)
 
 def rebuild_test_list(output_file):
-	print "rebuild_test_list" 
+	
+	with open(output_file, 'r+') as trx_handle:
+		 
+		trx = ElementTree.parse(trx_handle)
+		
+		test_entries = trx.find("p:TestEntries", namespaces)
+		
+		for test_entry in test_entries.findall("p:TestEntry", namespaces):
+			test_entries.remove(test_entry)
+			
+		test_list_id = trx.find("p:TestLists/p:TestList[@name='Results Not in a List']", namespaces).attrib['id']
+		
+		for unit_test_result in trx.iterfind("p:Results/p:UnitTestResult", namespaces):
+			unit_test_result.set('testListId', test_list_id)
+			
+			test_entry = ElementTree.Element('TestEntry')
+			test_entry.set('testId', unit_test_result.attrib['testId'])
+			test_entry.set('executionId', unit_test_result.attrib['executionId'])
+			test_entry.set('testListId', test_list_id)
+			
+			test_entries.append(test_entry)
+		
+		trx_handle.seek(0)
+		trx.write(trx_handle)
+		trx_handle.truncate()
+
 
 files = sys.argv
 
