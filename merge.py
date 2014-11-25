@@ -5,46 +5,68 @@ import xml.etree.ElementTree as ElementTree
 unit_test_result_path_prefixed = "p:Results/p:UnitTestResult"
 unit_test_path_prefixed = "p:TestDefinitions/p:UnitTest"
 run_deployment_root_prefixed = "p:TestSettings/p:Deployment[@runDeploymentRoot]"
+result_file_prefixed = "p:ResultFiles/p:ResultFile[@path]"
 
 namespaces = {'p': 'http://microsoft.com/schemas/VisualStudio/TeamTest/2010'}
 ElementTree.register_namespace("",namespaces['p'])
 
-def get_deployment_dir(trx):
-	return trx.find(run_deployment_root_prefixed, namespaces).attrib['runDeploymentRoot']
+class Trx:
+	def __init__(self, handle, path):
+		self.root = ElementTree.parse(handle)
+		self.handle = handle
+		self.path = path
+		self.dir = os.path.dirname(path)
+	
+	def __str__(self):
+		return "Path: " + self.path + " BaseDir: " + self.dir
 
-def set_deployment_dir(trx, value):
-	deployment_root_node = trx.find(run_deployment_root_prefixed, namespaces).attrib['runDeploymentRoot']
+def get_deployment_dir(trx_root_element):
+	return trx_root_element.find(run_deployment_root_prefixed, namespaces).attrib['runDeploymentRoot']
+
+def set_deployment_dir(trx_root_element, value):
+	deployment_root_node = trx_root_element.find(run_deployment_root_prefixed, namespaces).attrib['runDeploymentRoot']
 	deployment_root_node.set('runDeploymentRoot', value)
+
+def copy_result_files(source, target, execution_id):
+	
+	source_run_deployment_root = get_deployment_dir(source.root)
+	target_run_deployment_root = get_deployment_dir(target.root)	
+	
+	result_file_path = unit_test_result_path_prefixed + "[@executionId='" + execution_id + "']/" + result_file_prefixed
+	
+	source_result_files = source.root.find(result_file_path, namespaces)
+	
+	if source_result_files is not None:
+		
+		source_result_files_dir = os.path.join(source.dir, source_run_deployment_root, "In", execution_id)
+		target_result_files_dir = os.path.join(target.dir, target_run_deployment_root, "In", execution_id)
+		
+		shutil.copytree(source_result_files_dir, target_result_files_dir)
 
 def merge(target_file, source_file):
 
-	source_file_base_dir = os.path.dirname(source_file)
-	target_file_base_dir = os.path.dirname(target_file)
-	
-	source_file = open(source_file)
-	target_file = open(target_file, 'r+')
+	source = Trx(open(source_file), source_file)
+	target = Trx(open(target_file, 'r+'), target_file)
 
-	source = ElementTree.parse(source_file)
-	target = ElementTree.parse(target_file)
-
-	update_existing_test_results(source, target, source_file_base_dir, target_file_base_dir)
+	update_existing_test_results(source, target)
 
 	append_new_tests(source, target)
 
-	target_file.seek(0)
-	target.write(target_file)
-	target_file.truncate()
+	target.handle.seek(0)
+	target.root.write(target.handle)
+	target.handle.truncate()
 
-	source_file.close()
-	target_file.close()
+	source.handle.close()
+	target.handle.close()
 
-def update_existing_test_results(source, target, source_file_base_dir, target_file_base_dir):
-	target_results = target.find("p:Results", namespaces)
-	source_run_deployment_root = get_deployment_dir(source)
-	target_run_deployment_root = get_deployment_dir(target)
+def update_existing_test_results(source, target):
 	
-	for source_unit_test_result in source.iterfind(unit_test_result_path_prefixed, namespaces):
-		target_unit_test_result = target.find(unit_test_result_path_prefixed + "[@testName='" + source_unit_test_result.attrib['testName'] + "']", namespaces) 
+	target_results = target.root.find("p:Results", namespaces)
+	source_run_deployment_root = get_deployment_dir(source.root)
+	target_run_deployment_root = get_deployment_dir(target.root)
+	
+	for source_unit_test_result in source.root.iterfind(unit_test_result_path_prefixed, namespaces):
+		target_unit_test_result = target.root.find(unit_test_result_path_prefixed + "[@testName='" + source_unit_test_result.attrib['testName'] + "']", namespaces) 
 		if target_unit_test_result is not None:
 			
 			source_start_time = dateutil.parser.parse(source_unit_test_result.attrib['startTime'])
@@ -57,45 +79,43 @@ def update_existing_test_results(source, target, source_file_base_dir, target_fi
 				old_execution_id = target_unit_test_result.attrib['executionId']
 				new_execution_id = source_unit_test_result.attrib['executionId']
 				
-				unit_test_execution = target.find(unit_test_path_prefixed + "/p:Execution[@id='" + old_execution_id + "']", namespaces) 
+				unit_test_execution = target.root.find(unit_test_path_prefixed + "/p:Execution[@id='" + old_execution_id + "']", namespaces) 
 				unit_test_execution.set('id', new_execution_id)
 				
-				source_result_files = source_unit_test_result.find("p:ResultFiles/p:ResultFile[@path]", namespaces)
+				source_result_files = source_unit_test_result.find(result_file_prefixed, namespaces)
+				
 				if source_result_files is not None:
-					#for result_file in source_result_files:
-						# windows_path_parts = ntpath.split(result_file.attrib['path'])
-						# path = os.path.join(windows_path_parts[0], windows_path_parts[1])
-						
-					source_result_files_dir = os.path.join(source_file_base_dir, source_run_deployment_root, "In", new_execution_id)
-					target_result_files_dir = os.path.join(target_file_base_dir, target_run_deployment_root, "In", new_execution_id)
 					
-					old_result_files_dir = os.path.join(target_file_base_dir, target_run_deployment_root, "In", old_execution_id)
+					old_result_files_dir = os.path.join(target.dir, target_run_deployment_root, "In", old_execution_id)
 					
 					if os.path.exists(old_result_files_dir):
 						shutil.rmtree(old_result_files_dir)
-						
-					shutil.copytree(source_result_files_dir, target_result_files_dir)
+				
+					copy_result_files(source, target, new_execution_id)
 				
 				target_results.remove(target_unit_test_result)
 				target_results.append(copy.deepcopy(source_unit_test_result))
 
 def append_new_tests(source, target):
 	
-	target_test_definitions = target.find("p:TestDefinitions", namespaces)
+	target_test_definitions = target.root.find("p:TestDefinitions", namespaces)
 	
-	for source_unit_test in source.iterfind(unit_test_path_prefixed, namespaces):
-		target_unit_test = target.find(unit_test_path_prefixed + "[@name='" + source_unit_test.attrib['name'] + "']", namespaces) 
+	for source_unit_test in source.root.iterfind(unit_test_path_prefixed, namespaces):
+		target_unit_test = target.root.find(unit_test_path_prefixed + "[@name='" + source_unit_test.attrib['name'] + "']", namespaces) 
 		if target_unit_test is None:
 			print "\tAdding test definition: " + source_unit_test.attrib['name']
 			target_test_definitions.append(copy.deepcopy(source_unit_test))
 			
-	target_results = target.find("p:Results", namespaces)
+	target_results = target.root.find("p:Results", namespaces)
 	
-	for source_test_result in source.iterfind(unit_test_result_path_prefixed, namespaces):
-		target_test_result = target.find(unit_test_result_path_prefixed + "[@testName='" + source_test_result.attrib['testName'] + "']", namespaces) 
+	for source_test_result in source.root.iterfind(unit_test_result_path_prefixed, namespaces):
+		target_test_result = target.root.find(unit_test_result_path_prefixed + "[@testName='" + source_test_result.attrib['testName'] + "']", namespaces) 
 		if target_test_result is None:
 			print "\tAdding test result: " + source_test_result.attrib['testName']
 			target_results.append(copy.deepcopy(source_test_result))
+			
+			copy_result_files(source, target, source_test_result.attrib['executionId'])
+					
 
 def copy_base_trx(source, output):
 	shutil.copyfile(source, output)
@@ -108,7 +128,8 @@ def copy_base_trx(source, output):
 	
 	print "copying trx data dir from '" + source_data_dir + "' to '" + target_data_dir + "'"
 	
-	shutil.rmtree(target_data_dir)
+	if (os.path.exists(target_data_dir)):
+		shutil.rmtree(target_data_dir)
 	shutil.copytree(source_data_dir, target_data_dir)
 
 def rebuild_test_list(output_file):
