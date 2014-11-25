@@ -100,11 +100,15 @@ def append_new_tests(source, target):
 def copy_base_trx(source, output):
 	shutil.copyfile(source, output)
 	source_deployment_dir = get_deployment_dir(ElementTree.parse(source))
-	source_data_dir = os.path.join(os.path.dirname(source), source_deployment_dir)
-	target_data_dir = os.path.join(os.path.abspath(os.path.dirname(output)), source_deployment_dir)
+	source_data_dir = os.path.abspath(os.path.join(os.path.dirname(source), source_deployment_dir))
+	target_data_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(output)), source_deployment_dir))
+	
+	if (source_data_dir == target_data_dir):
+		return
+	
 	print "copying trx data dir from '" + source_data_dir + "' to '" + target_data_dir + "'"
-	if os.path.isdir(target_data_dir):
-		shutil.rmtree(target_data_dir)
+	
+	shutil.rmtree(target_data_dir)
 	shutil.copytree(source_data_dir, target_data_dir)
 
 def rebuild_test_list(output_file):
