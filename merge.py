@@ -127,6 +127,7 @@ def rebuild_test_list(output_file):
 			test_entry.set('testId', unit_test_result.attrib['testId'])
 			test_entry.set('executionId', unit_test_result.attrib['executionId'])
 			test_entry.set('testListId', test_list_id)
+			test_entry.tail = os.linesep + "    "
 			
 			test_entries.append(test_entry)
 		
