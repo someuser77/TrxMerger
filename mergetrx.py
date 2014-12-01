@@ -43,7 +43,7 @@ def copy_result_files(source, target, execution_id):
 		
 		shutil.copytree(source_result_files_dir, target_result_files_dir)
 
-def merge(target_file, source_file):
+def load_and_merge(target_file, source_file):
 
 	source = Trx(open(source_file), source_file)
 	target = Trx(open(target_file, 'r+'), target_file)
@@ -160,23 +160,25 @@ def rebuild_test_list(output_file):
 		trx.write(trx_handle)
 		trx_handle.truncate()
 
+def merge(files):
 
-files = sys.argv
+	if len(files) < 2:
+	  print 'Must specify at least one input file and an output file'
+	  return
+	  
+	output = files[-1]
+	first = files[0]
+	print "Processing file: " + first
 
-if len(files) < 3:
-  print 'Must specify at least one input file and an output file'
-  exit()
-  
-output = files[-1]
-print "Processing file: " + files[1]
+	copy_base_trx(first, output)
 
-copy_base_trx(files[1], output)
+	files_to_process = files[1:-1]
 
-files_to_process = files[2:-1]
+	for file in files_to_process:
+		print "Processing file: " + file
+		load_and_merge(output, file)
 
-for file in files_to_process:
-	print "Processing file: " + file
-	merge(output, file)
+	rebuild_test_list(output)
 
-rebuild_test_list(output)
-  
+if __name__ == '__main__':
+	merge(sys.argv[1:])
