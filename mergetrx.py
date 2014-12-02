@@ -24,7 +24,7 @@ def get_deployment_dir(trx_root_element):
 	return trx_root_element.find(run_deployment_root_prefixed, namespaces).attrib['runDeploymentRoot']
 
 def set_deployment_dir(trx_root_element, value):
-	deployment_root_node = trx_root_element.find(run_deployment_root_prefixed, namespaces).attrib['runDeploymentRoot']
+	deployment_root_node = trx_root_element.find(run_deployment_root_prefixed, namespaces)
 	deployment_root_node.set('runDeploymentRoot', value)
 
 def copy_result_files(source, target, execution_id):
@@ -121,7 +121,11 @@ def copy_base_trx(source, output):
 	shutil.copyfile(source, output)
 	source_deployment_dir = get_deployment_dir(ElementTree.parse(source))
 	source_data_dir = os.path.abspath(os.path.join(os.path.dirname(source), source_deployment_dir))
-	target_data_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(output)), source_deployment_dir))
+	
+	path, filename = os.path.split(output)
+	filename = os.path.splitext(filename)[0]
+	
+	target_data_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(output)), filename))
 	
 	if (source_data_dir == target_data_dir):
 		return
@@ -130,6 +134,11 @@ def copy_base_trx(source, output):
 	
 	if (os.path.exists(target_data_dir)):
 		shutil.rmtree(target_data_dir)
+		
+	root = ElementTree.parse(output)
+	set_deployment_dir(root, target_data_dir)
+	root.write(output)
+		
 	shutil.copytree(source_data_dir, target_data_dir)
 
 def rebuild_test_list(output_file):
