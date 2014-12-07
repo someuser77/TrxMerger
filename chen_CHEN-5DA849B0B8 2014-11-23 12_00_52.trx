@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="0cead150-f0d2-4dd0-bdcb-cbfab083828a" name="chen@CHEN-5DA849B0B8 2014-11-23 12:00:52" runUser="CHEN-5DA849B0B8\chen" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="d194b7bf-bc73-4ba2-8ebd-41fefb5e2ee6">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="chen_CHEN-5DA849B0B8 2014-11-23 12_00_52" />
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2014-11-23T12:00:52.8293680+02:00" queuing="2014-11-23T12:00:52.8293680+02:00" start="2014-11-23T12:00:53.1298000+02:00" finish="2014-11-23T12:00:53.8808800+02:00" />
+  <ResultSummary outcome="Failed">
+    <Counters total="5" executed="5" passed="3" error="0" failed="2" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="TestMethod2" storage="c:\documents and settings\chen\my documents\visual studio 2010\projects\testproject1\testproject1\bin\debug\testproject1.dll" id="9381223e-8095-9777-a0c7-26043045171c">
+      <Execution id="e6260229-7719-428c-b6c6-8405dc26a74a" />
+      <TestMethod codeBase="C:/Documents and Settings/chen/My Documents/Visual Studio 2010/Projects/TestProject1/TestProject1/bin/Debug/TestProject1.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TestProject1.UnitTest1, TestProject1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestMethod2" />
+    </UnitTest>
+    <UnitTest name="TestMethod0" storage="c:\documents and settings\chen\my documents\visual studio 2010\projects\testproject1\testproject1\bin\debug\testproject1.dll" id="d003f351-33b2-6971-36cb-56aa02a270d9">
+      <Execution id="5675de22-e706-4d34-8614-beca667eeead" />
+      <TestMethod codeBase="C:/Documents and Settings/chen/My Documents/Visual Studio 2010/Projects/TestProject1/TestProject1/bin/Debug/TestProject1.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TestProject1.UnitTest1, TestProject1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestMethod0" />
+    </UnitTest>
+    <UnitTest name="TestMethod1" storage="c:\documents and settings\chen\my documents\visual studio 2010\projects\testproject1\testproject1\bin\debug\testproject1.dll" id="59863143-3238-122e-4d8a-637b491cc755">
+      <Execution id="37b0914f-6b6d-4489-919c-1dd1843ab4d0" />
+      <TestMethod codeBase="C:/Documents and Settings/chen/My Documents/Visual Studio 2010/Projects/TestProject1/TestProject1/bin/Debug/TestProject1.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TestProject1.UnitTest1, TestProject1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestMethod1" />
+    </UnitTest>
+    <UnitTest name="TestMethod4" storage="c:\documents and settings\chen\my documents\visual studio 2010\projects\testproject1\testproject1\bin\debug\testproject1.dll" id="9df1d9aa-a8c0-dfd7-97f4-25855e430801">
+      <Execution id="312c2bca-9b4f-41f4-8dd5-5bef8c711fc0" />
+      <TestMethod codeBase="C:/Documents and Settings/chen/My Documents/Visual Studio 2010/Projects/TestProject1/TestProject1/bin/Debug/TestProject1.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TestProject1.UnitTest1, TestProject1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestMethod4" />
+    </UnitTest>
+    <UnitTest name="TestMethod3" storage="c:\documents and settings\chen\my documents\visual studio 2010\projects\testproject1\testproject1\bin\debug\testproject1.dll" id="778ac384-f4ff-6a8c-7e52-50f4693efe57">
+      <Execution id="e7e4dfe3-4cfa-46d5-9595-f36e048ee306" />
+      <TestMethod codeBase="C:/Documents and Settings/chen/My Documents/Visual Studio 2010/Projects/TestProject1/TestProject1/bin/Debug/TestProject1.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TestProject1.UnitTest1, TestProject1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestMethod3" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="d003f351-33b2-6971-36cb-56aa02a270d9" executionId="5675de22-e706-4d34-8614-beca667eeead" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="59863143-3238-122e-4d8a-637b491cc755" executionId="37b0914f-6b6d-4489-919c-1dd1843ab4d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9381223e-8095-9777-a0c7-26043045171c" executionId="e6260229-7719-428c-b6c6-8405dc26a74a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="778ac384-f4ff-6a8c-7e52-50f4693efe57" executionId="e7e4dfe3-4cfa-46d5-9595-f36e048ee306" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9df1d9aa-a8c0-dfd7-97f4-25855e430801" executionId="312c2bca-9b4f-41f4-8dd5-5bef8c711fc0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="5675de22-e706-4d34-8614-beca667eeead" testId="d003f351-33b2-6971-36cb-56aa02a270d9" testName="TestMethod0" computerName="CHEN-5DA849B0B8" duration="00:00:00.0522451" startTime="2014-11-23T12:00:53.2099152+02:00" endTime="2014-11-23T12:00:53.5704336+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5675de22-e706-4d34-8614-beca667eeead">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.IsTrue failed. Run 1</Message>
+          <StackTrace>   at TestProject1.UnitTest1.TestMethod0() in C:\Documents and Settings\chen\My Documents\Visual Studio 2010\Projects\TestProject1\TestProject1\UnitTest1.cs:line 30
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+      <ResultFiles>
+        <ResultFile path="CHEN-5DA849B0B8\out.txt" />
+      </ResultFiles>
+    </UnitTestResult>
+    <UnitTestResult executionId="37b0914f-6b6d-4489-919c-1dd1843ab4d0" testId="59863143-3238-122e-4d8a-637b491cc755" testName="TestMethod1" computerName="CHEN-5DA849B0B8" duration="00:00:00.0021963" startTime="2014-11-23T12:00:53.5804480+02:00" endTime="2014-11-23T12:00:53.5904624+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="37b0914f-6b6d-4489-919c-1dd1843ab4d0">
+    </UnitTestResult>
+    <UnitTestResult executionId="e6260229-7719-428c-b6c6-8405dc26a74a" testId="9381223e-8095-9777-a0c7-26043045171c" testName="TestMethod2" computerName="CHEN-5DA849B0B8" duration="00:00:00.0048469" startTime="2014-11-23T12:00:53.6305200+02:00" endTime="2014-11-23T12:00:53.6505488+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e6260229-7719-428c-b6c6-8405dc26a74a">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.IsTrue failed. Run 1</Message>
+          <StackTrace>   at TestProject1.UnitTest1.TestMethod2() in C:\Documents and Settings\chen\My Documents\Visual Studio 2010\Projects\TestProject1\TestProject1\UnitTest1.cs:line 44
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+      <ResultFiles>
+        <ResultFile path="CHEN-5DA849B0B8\TestMethod2-only-on-failure.txt" />
+      </ResultFiles>
+    </UnitTestResult>
+    <UnitTestResult executionId="e7e4dfe3-4cfa-46d5-9595-f36e048ee306" testId="778ac384-f4ff-6a8c-7e52-50f4693efe57" testName="TestMethod3" computerName="CHEN-5DA849B0B8" duration="00:00:00.0005687" startTime="2014-11-23T12:00:53.6805920+02:00" endTime="2014-11-23T12:00:53.6805920+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e7e4dfe3-4cfa-46d5-9595-f36e048ee306">
+    </UnitTestResult>
+    <UnitTestResult executionId="312c2bca-9b4f-41f4-8dd5-5bef8c711fc0" testId="9df1d9aa-a8c0-dfd7-97f4-25855e430801" testName="TestMethod4" computerName="CHEN-5DA849B0B8" duration="00:00:00.0022852" startTime="2014-11-23T12:00:53.6906064+02:00" endTime="2014-11-23T12:00:53.6906064+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="312c2bca-9b4f-41f4-8dd5-5bef8c711fc0">
+    </UnitTestResult>
+  </Results>
+</TestRun>
