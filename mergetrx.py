@@ -130,16 +130,18 @@ def copy_base_trx(source, output):
 	if (source_data_dir == target_data_dir):
 		return
 	
-	print "copying trx data dir from '" + source_data_dir + "' to '" + target_data_dir + "'"
-	
 	if (os.path.exists(target_data_dir)):
 		shutil.rmtree(target_data_dir)
+		
+	if (os.path.exists(source_data_dir)):
+		print "copying trx data dir from '" + source_data_dir + "' to '" + target_data_dir + "'"
+		shutil.copytree(source_data_dir, target_data_dir)
 		
 	root = ElementTree.parse(output)
 	set_deployment_dir(root, target_data_dir)
 	root.write(output)
 		
-	shutil.copytree(source_data_dir, target_data_dir)
+	
 
 def rebuild_test_list(output_file):
 	
