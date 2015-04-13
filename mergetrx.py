@@ -58,6 +58,27 @@ def load_and_merge(target_file, source_file):
 
 	source.handle.close()
 	target.handle.close()
+		
+def get_test_result_class_name(root, unit_test_result_node):
+	class_name = root.find(unit_test_path_prefixed + "[@id='" + unit_test_result_node.attrib['testId'] + "']/p:TestMethod", namespaces).attrib['className'].split(',')[0]
+	return class_name
+	
+def get_test_result_full_name(root, unit_test_result):
+	class_name = get_test_result_class_name(root, unit_test_result)
+	test_name = unit_test_result.attrib['testName']
+	full_test_name = class_name + '.' + test_name
+	return full_test_name
+	
+def find_test_result_by_full_name(root, full_test_name):
+	i = full_test_name.rfind('.')
+	class_name = full_test_name[:i]
+	test_name = full_test_name[i+1:]
+	xpath = unit_test_result_path_prefixed + "[@testName='" + test_name + "']"
+	for test_result in root.iterfind(xpath, namespaces):
+		if get_test_result_class_name(root, test_result) == class_name:
+			return test_result
+
+	return None
 
 def update_existing_test_results(source, target):
 	
@@ -66,7 +87,11 @@ def update_existing_test_results(source, target):
 	target_run_deployment_root = get_deployment_dir(target.root)
 	
 	for source_unit_test_result in source.root.iterfind(unit_test_result_path_prefixed, namespaces):
-		target_unit_test_result = target.root.find(unit_test_result_path_prefixed + "[@testName='" + source_unit_test_result.attrib['testName'] + "']", namespaces) 
+		
+		full_test_name = get_test_result_full_name(source.root, source_unit_test_result)
+		
+		target_unit_test_result = find_test_result_by_full_name(target.root, full_test_name)
+		
 		if target_unit_test_result is not None:
 			
 			source_start_time = dateutil.parser.parse(source_unit_test_result.attrib['startTime'])
@@ -101,7 +126,10 @@ def append_new_tests(source, target):
 	target_test_definitions = target.root.find("p:TestDefinitions", namespaces)
 	
 	for source_unit_test in source.root.iterfind(unit_test_path_prefixed, namespaces):
-		target_unit_test = target.root.find(unit_test_path_prefixed + "[@name='" + source_unit_test.attrib['name'] + "']", namespaces) 
+		test_name = source_unit_test.attrib['name']
+		test_class = source_unit_test.find('p:TestMethod', namespaces).attrib['className']
+		xpath = unit_test_path_prefixed + "[@name='" + test_name + "']/p:TestMethod[@className='" + test_class + "']"
+		target_unit_test = target.root.find(xpath, namespaces) 
 		if target_unit_test is None:
 			print "\tAdding test definition: " + source_unit_test.attrib['name']
 			target_test_definitions.append(copy.deepcopy(source_unit_test))
@@ -109,7 +137,8 @@ def append_new_tests(source, target):
 	target_results = target.root.find("p:Results", namespaces)
 	
 	for source_test_result in source.root.iterfind(unit_test_result_path_prefixed, namespaces):
-		target_test_result = target.root.find(unit_test_result_path_prefixed + "[@testName='" + source_test_result.attrib['testName'] + "']", namespaces) 
+		full_test_name = get_test_result_full_name(source.root, source_test_result)
+		target_test_result = find_test_result_by_full_name(target.root, full_test_name)
 		if target_test_result is None:
 			print "\tAdding test result: " + source_test_result.attrib['testName']
 			target_results.append(copy.deepcopy(source_test_result))

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="0169fbc9-8307-4468-862e-e35398f85ca9" name="chen@CHEN-5DA849B0B8 2015-04-13 11:14:19" runUser="CHEN-5DA849B0B8\chen" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="d194b7bf-bc73-4ba2-8ebd-41fefb5e2ee6">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="chen_CHEN-5DA849B0B8 2015-04-13 11_14_19" />
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2015-04-13T11:14:19.6156852+03:00" queuing="2015-04-13T11:14:19.6313102+03:00" start="2015-04-13T11:14:19.6469352+03:00" finish="2015-04-13T11:14:20.1938102+03:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="ReaccuringTestMethod" storage="c:\documents and settings\chen\my documents\visual studio 2010\projects\testproject1\testproject1\bin\debug\testproject1.dll" id="bd3faae3-ecb3-0106-050a-d179d9bb9a07">
+      <Execution id="e5eb2d06-ffd6-40dd-bc59-9d382e396be4" />
+      <TestMethod codeBase="C:/Documents and Settings/chen/My Documents/Visual Studio 2010/Projects/TestProject1/TestProject1/bin/Debug/TestProject1.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TestProject1.UnitTest3, TestProject1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="ReaccuringTestMethod" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="bd3faae3-ecb3-0106-050a-d179d9bb9a07" executionId="e5eb2d06-ffd6-40dd-bc59-9d382e396be4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="e5eb2d06-ffd6-40dd-bc59-9d382e396be4" testId="bd3faae3-ecb3-0106-050a-d179d9bb9a07" testName="ReaccuringTestMethod" computerName="CHEN-5DA849B0B8" duration="00:00:00.0240350" startTime="2015-04-13T11:14:19.6781852+03:00" endTime="2015-04-13T11:14:20.1469352+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5eb2d06-ffd6-40dd-bc59-9d382e396be4">
+    </UnitTestResult>
+  </Results>
+</TestRun>
